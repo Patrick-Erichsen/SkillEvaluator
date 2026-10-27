@@ -40,8 +40,11 @@ All notable changes to SkillEvaluator are documented in this file.
 ### Fixed
 
 - Local-mode verifier uploads now copy directly to the absent destination,
-  avoiding an unnecessary rollback snapshot of an empty tests directory. A
-  rejected upload no longer leaves an empty destination behind.
+  avoiding an unnecessary rollback snapshot of an empty tests directory.
+  Inputs and rewritten scripts are prepared privately before publication,
+  so failed uploads preserve existing verifier files. Missing or invalid
+  sources fail rather than creating an empty verifier directory. Per-step
+  verifier uploads retain shared test files, with step files taking precedence.
 - Tier 3 error recovery now scores unrecovered command failures as zero and
   includes them in fault counts and failure verdicts/report reasons. Host and
   bundled verifier detection agree and use a result's execution status when it

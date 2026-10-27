@@ -121,7 +121,8 @@ jobs:
     name: HTML parser compatibility (Python ${{ matrix.python-version }})
     needs: classify-changes
     if: ${{ !cancelled() && needs.classify-changes.outputs.docs_only != 'true' }}
-    runs-on: ubuntu-latest
+    # Keep the historical Python patches on their supported runner image.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -245,10 +246,13 @@ jobs:
           uv run pytest -q
           tests/test_harbor_local_sandbox.py
           tests/test_harbor_local_mode.py
+          tests/test_harbor_local_upload.py
           tests/test_local_mode_contract.py
           tests/test_tier3_progress.py
           tests/test_tier3_result_display.py
           tests/test_harbor_runtime_preflight.py
+      - name: Exercise real local verifier uploads
+        run: uv run pytest -q tests/test_harbor_local_upload.py -m integration
 
   tier2-macos:
     name: Tier 2 (macos-latest)
